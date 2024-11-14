@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salón de Belleza María Elena</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+
+<style>
+    /* Aplica la fuente a todo el documento */
+    body {
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* Cambia el color de las letras para todo el modal */
+    .modal-body {
+        color: #333; /* Color oscuro para la legibilidad */
+    }
+
+    h4, p, .text-center {
+        color: #1a1a1a; /* Títulos en color oscuro */
+    }
+
+    /* Texto para los campos de formulario */
+    .form-control {
+        color: #555; /* Color más suave para los textos dentro de los campos */
+    }
+
+    /* Cambiar el color del botón */
+    .btn {
+        background-color: #ff6f61; /* Color atractivo para los botones */
+        border-color: #ff6f61; /* Bordes en el mismo color */
+    }
+
+    .btn:hover {
+        background-color: #ff4a36; /* Color más intenso al pasar el mouse */
+        border-color: #ff4a36;
+    }
+
+    /* Color para el enlace de 'Inicia sesión aquí' */
+    .btn-outline-light {
+        color: #ff6f61; /* Color llamativo para el enlace */
+    }
+
+    .btn-outline-light:hover {
+        background-color: #ff6f61;
+        color: white;
+    }
+
+    /* Color para el texto de aviso en la parte inferior */
+    .d-flex align-items-center p {
+        color: #ff6f61; /* Color llamativo para las notificaciones */
+    }
+</style>
+<body>
+
+    <!-- Encabezado de Navegación -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="../img/logo.png" alt="logo" height="60">
+                Salón de Belleza
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Horario</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Reserva</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person"></i> Cuenta
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalitoLog">Iniciar Sesión</a></li>
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalitoReg">Registrarse</a></li>
+                            <li><a class="dropdown-item" href="Miperfil.html">Mi Perfil</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Modal de Login -->
+<div class="modal fade" id="modalitoLog" tabindex="-1" aria-labelledby="modalitoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="container py-3">
+                    <div class="card text-white rounded-3 text-black" style="background-color: #ffffff;">
+                        <div class="row g-0">
+                            <div class="col-lg-6">
+                                <div class="card-body p-md-4 mx-md-3">
+                                    <div class="text-center">
+                                        <img src="../img/logo.png" style="width: 185px;" alt="logo">
+                                    </div>
+
+                                    <form>
+                                        <p class="text-center text-dark">Logeate para continuar</p>
+
+                                        <div data-mdb-input-init class="form-outline mb-3">
+                                            <input type="text" placeholder="Username" class="form-control">
+                                        </div>
+
+                                        <div data-mdb-input-init class="form-outline mb-3">
+                                            <input type="password" name="" id="" class="form-control" placeholder="Contraseña">
+                                        </div>
+
+                                        <div class="d-flex flex-column align-items-center pt-1 mb-4 pb-1">
+                                            <button data-mdb-button-init data-mdb-ripple-init class="btn btn-block text-white fa-lg gradient-custom-2 mb-2 w-100 login-btn" type="button">Iniciar Sesión</button>
+                                            <a class="text-muted w-100 text-center" href="#!">
+                                                <h6 class="text-dark">Olvidaste tu contraseña?</h6>
+                                            </a>
+                                        </div>
+
+                                        <div class="d-flex align-items-center justify-content-center pb-3">
+                                            <p class="mb-0 me-2" style="color: black;">No tienes cuenta?</p>
+                                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-morado" data-bs-toggle="modal" data-bs-target="#modalitoReg">Registrate</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 d-none d-lg-flex align-items-center gradient-custom-2">
+                                <div class="text-white px-3 py-4 p-md-3 mx-md-3">
+                                    <h4 class="mb-3 text-dark">Nos alegra verte nuevamente</h4>
+                                    <p class="small mb-0 text-dark">¡REDESCUBRE TU BELLEZA, REINVENTA TU ESTILO, BRILLA CON CONFIANZA!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Modal de Registro -->
+    <div class="modal fade" id="modalitoReg" tabindex="-1" aria-labelledby="modalitoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="container py-3">
+                        <div class="card text-white rounded-3 text-black" style="background-color: #86bcb7;">
+                            <div class="row g-0">
+                                <!-- Imagen y mensaje de bienvenida -->
+                                <div class="col-lg-6 d-none d-lg-flex align-items-center gradient-custom-2">
+                                    <div class="px-3 py-4 p-md-5 mx-md-4">
+                                        <h4 class="mb-4" style="font-family: 'Poppins', sans-serif; color: #1a1a1a;">Salón de Belleza María Elena</h4>
+                                        <p class="small mb-0" style="font-family: 'Poppins', sans-serif; color: #1a1a1a;">El lugar perfecto para relajarte y realzar tu belleza. Disfruta de nuestros servicios profesionales en un ambiente acogedor. ¡Regístrate y reserva tus citas con facilidad!</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Formulario de Registro -->
+                                <div class="col-lg-6">
+                                    <div class="card-body p-md-5 mx-md-4">
+                                        <form class="needs-validation" novalidate>
+                                            <p class="text-center" style="font-size: 23px; font-family: 'Poppins', sans-serif; color: #333;">Regístrate para continuar</p>
+    
+                                            <!-- Campo de nombre -->
+                                            <div class="form-outline mb-4">
+                                                <input type="text" placeholder="Nombre" class="form-control" id="validationCustomName" required>
+                                            </div>
+    
+                                            <!-- Campo de apellidos -->
+                                            <div class="form-outline mb-4">
+                                                <input type="text" placeholder="Apellidos" class="form-control" id="validationCustomLastName" required>
+                                            </div>
+    
+                                            <!-- Campo de fecha de nacimiento (calendario) -->
+                                            <div class="form-outline mb-4">
+                                                <input type="date" class="form-control" id="validationCustomDOB" required>
+                                            </div>
+    
+                                            <!-- Campo de teléfono -->
+                                            <div class="form-outline mb-4">
+                                                <input type="tel" placeholder="Teléfono" class="form-control" id="validationCustomPhone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+                                            </div>
+    
+                                            <!-- Campo de correo electrónico -->
+                                            <div class="form-outline mb-4">
+                                                <input type="email" placeholder="Correo electrónico" class="form-control" id="validationCustomEmail" aria-describedby="inputGroupPrepend" required>
+                                            </div>
+    
+                                            <!-- Campo de contraseña -->
+                                            <div class="form-outline mb-4">
+                                                <input type="password" placeholder="Contraseña" class="form-control" id="validationCustomPassword" required>
+                                            </div>
+    
+                                            <!-- Botón de registro -->
+                                            <div class="d-flex flex-column align-items-center pt-1 mb-5 pb-1">
+                                                <button class="btn btn-block text-white fa-lg gradient-custom-2 mb-3 w-100" type="submit">Regístrate</button>
+                                            </div>
+    
+                                            <!-- Enlace para iniciar sesión si ya tiene cuenta -->
+                                            <div class="d-flex align-items-center justify-content-center pb-4">
+                                                <p class="mb-0 me-2" style="font-family: 'Poppins', sans-serif; color: #333;">¿Ya tienes cuenta?</p>
+                                                <button type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#modalitoLog">Inicia sesión aquí</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+
+    <!-- Sección Principal -->
+    <section class="container mt-4">
+        <!-- Carrusel -->
+    <!-- Sección Principal -->
+    <section class="container mt-4">
+    <!-- Carrusel -->
+        <div id="carouselExample" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="../img/carrusel2.jpg" class="d-block w-100" alt="Imagen 2" style="height: 400px; object-fit: cover;">
+                </div>
+                <div class="carousel-item">
+                    <img src="../img/carrusel3.png" class="d-block w-100" alt="Imagen 3" style="height: 400px; object-fit: cover;">
+                </div>
+                <div class="carousel-item">
+                    <img src="../img/carrusel1.png" class="d-block w-100" alt="Imagen 1" style="height: 400px; object-fit: cover;">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>  
+    </section>
+
+    <div class="row mt-4">
+        <div class="col-md-6 d-flex justify-content-center align-items-center">
+            <img src="../img/salon.png" class="img-fluid shadow-lg rounded-circle" alt="Imagen Destacada">
+        </div>
+        <div class="col-md-6 d-flex flex-column justify-content-center">
+            <h2 class="display-4 fw-bold text-primary">Bienvenido a Salón de Belleza María Elena</h2>
+            <p class="lead text-muted">Ofrecemos una experiencia de belleza única y personalizada para que te sientas increíble. Disfruta de un servicio excepcional en un ambiente acogedor.</p>
+            <a href="#services" class="btn btn-primary btn-lg mt-3 shadow-lg">Descubre más</a>
+        </div>
+    </div>
+    </section>
+
+    <!-- Sección de Servicios -->
+    <section class="container mt-5">
+        <h3 class="text-center text-primary mb-5">Nuestros Servicios</h3>
+        <div class="row mt-4">
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-lg border-light rounded">
+                    <img src="../img/corte.png" class="card-img-top servicio-img" alt="Servicio 1">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-dark">Corte de Cabello</h5>
+                        <p class="card-text text-muted">Descripción del servicio.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-lg border-light rounded">
+                    <img src="../img/manicure.png" class="card-img-top servicio-img" alt="Servicio 2">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-dark">Manicura</h5>
+                        <p class="card-text text-muted">Descripción del servicio.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-lg border-light rounded">
+                    <img src="../img/maquillaje.png" class="card-img-top servicio-img" alt="Servicio 3">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-dark">Maquillaje</h5>
+                        <p class="card-text text-muted">Descripción del servicio.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-lg border-light rounded">
+                    <img src="../img/spa.jpg" class="card-img-top servicio-img" alt="Servicio 4">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-dark">Spa</h5>
+                        <p class="card-text text-muted">Descripción del servicio.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
+    <!-- Pie de Página -->
+    <footer class="bg-dark text-white mt-5 py-4">
+        <div class="container text-center">
+            <p>© 2024 Salón de Belleza María Elena. Todos los derechos reservados.</p>
+            <p>Dirección: Conquista, Ciudad - Teléfono: (555) 123-4567</p>
+            <div>
+                <a href="#"><img src="../img/facebook.png" alt="Facebook"></a>
+                <a href="#"><img src="../img/twitterx.png" alt="Twitter"></a>
+                <a href="#"><img src="../img/instagram.png" alt="Instagram"></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

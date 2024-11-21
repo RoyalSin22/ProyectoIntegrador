@@ -4,128 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Encuesta de Satisfacción</title>
-    <!-- Cargar Bootstrap para diseño -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEJ1Q3gAhk5M9+0zXjW4u5cO4XjiMxxgf4y8A9jS2ZBsn6UQXZK3uAZj7V2yB" crossorigin="anonymous">
-    <style>
-        .star-rating {
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-        }
-        .star-rating input[type="radio"] {
-            display: none;
-        }
-        .star-rating label {
-            font-size: 2rem;
-            cursor: pointer;
-            color: gray;
-        }
-        .star-rating input[type="radio"]:checked ~ label {
-            color: gold;
-        }
-        .star-rating label:hover,
-        .star-rating label:hover ~ label {
-            color: gold;
-        }
-        .form-container {
-            max-width: 600px;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            background-color: #f9f9f9;
-        }
-        .btn-submit {
-            width: 100%;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/Encuestas.css">
 </head>
 <body>
+    <div class="container">
+        <h2>Encuesta de Satisfacción</h2>
+        <p>Queremos saber qué tan satisfecho estás con nuestro servicio. ¡Tu opinión es importante!</p>
 
-<div class="container my-5">
-    <div class="form-container">
-        <h3 class="text-center">Encuesta de Satisfacción del Cliente</h3>
-
-        <!-- Formulario de la encuesta -->
-        <form id="surveyForm">
-            <div class="mb-3">
-                <label for="rating" class="form-label">Califica nuestro servicio</label>
-                <div class="star-rating">
-                    <input type="radio" id="star5" name="rating" value="5">
-                    <label for="star5">★</label>
-                    <input type="radio" id="star4" name="rating" value="4">
-                    <label for="star4">★</label>
-                    <input type="radio" id="star3" name="rating" value="3">
-                    <label for="star3">★</label>
-                    <input type="radio" id="star2" name="rating" value="2">
-                    <label for="star2">★</label>
-                    <input type="radio" id="star1" name="rating" value="1">
-                    <label for="star1">★</label>
-                </div>
+        <!-- Pregunta de calificación con estrellas -->
+        <div class="question">
+            <h3 class="section-title">Calificación</h3>
+            <p>Selecciona el número de estrellas que refleja tu nivel de satisfacción:</p>
+            <div class="stars" id="stars">
+                <span class="star" data-value="1">★</span>
+                <span class="star" data-value="2">★</span>
+                <span class="star" data-value="3">★</span>
+                <span class="star" data-value="4">★</span>
+                <span class="star" data-value="5">★</span>
             </div>
-            <div class="mb-3">
-                <label for="comments" class="form-label">Comentarios (opcional)</label>
-                <textarea id="comments" class="form-control" rows="3" placeholder="Escribe tus comentarios aquí..."></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary btn-submit">Enviar Encuesta</button>
-        </form>
+        </div>
 
-        <!-- Mensaje de confirmación o error -->
-        <div id="responseMessage" class="mt-3"></div>
+        <!-- Campo para comentarios -->
+        <div class="question">
+            <h3 class="section-title">Comentarios</h3>
+            <textarea id="comments" placeholder="Escribe tus comentarios o sugerencias aquí..."></textarea>
+        </div>
+
+        <!-- Botón de envío -->
+        <button id="submitBtn">Enviar Encuesta</button>
+
+        <!-- Mensaje de éxito -->
+        <p class="success-message" id="successMessage">¡Gracias por tus comentarios!</p>
     </div>
-</div>
 
-<!-- Cargar dependencias JS de Bootstrap -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const stars = document.querySelectorAll(".star");
+            const comments = document.getElementById("comments");
+            const submitBtn = document.getElementById("submitBtn");
+            const successMessage = document.getElementById("successMessage");
+            let selectedRating = 0;
 
-<script>
-    // Función para enviar los datos del formulario
-    document.getElementById('surveyForm').addEventListener('submit', function(event) {
-        event.preventDefault();  // Evitar que el formulario se envíe de la manera tradicional
-    
-        // Obtener el valor de la calificación (estrella seleccionada)
-        const rating = document.querySelector('input[name="rating"]:checked');
-        
-        // Obtener el comentario
-        const comments = document.getElementById('comments').value;
-    
-        // Verificar si se ha seleccionado una calificación
-        if (!rating) {
-            document.getElementById('responseMessage').innerHTML = '<div class="alert alert-danger">Por favor, selecciona una calificación de estrellas.</div>';
-            return;
-        }
-    
-        // Crear un objeto con los datos de la encuesta
-        const surveyData = {
-            rating: rating.value,
-            comentarios: comments
-        };
-    
-        // Enviar los datos al backend usando fetch
-        fetch('guardar_encuesta.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(surveyData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message) {
-                document.getElementById('responseMessage').innerHTML = '<div class="alert alert-success">' + data.message + '</div>';
-                // Limpiar el formulario después de enviarlo
-                document.getElementById('surveyForm').reset();
-            } else if (data.error) {
-                document.getElementById('responseMessage').innerHTML = '<div class="alert alert-danger">' + data.error + '</div>';
-            }
-        })
-        .catch(error => {
-            console.error('Error al enviar la encuesta:', error);
-            document.getElementById('responseMessage').innerHTML = '<div class="alert alert-danger">Ocurrió un error al enviar los datos.</div>';
+            // Manejar la selección de estrellas
+            stars.forEach(star => {
+                star.addEventListener("click", function () {
+                    selectedRating = parseInt(this.getAttribute("data-value"));
+                    stars.forEach(s => s.classList.remove("selected"));
+                    for (let i = 0; i < selectedRating; i++) {
+                        stars[i].classList.add("selected");
+                    }
+                });
+            });
+
+            // Manejar el envío de datos
+            submitBtn.addEventListener("click", function () {
+                if (selectedRating === 0) {
+                    alert("Por favor, selecciona una calificación.");
+                    return;
+                }
+
+                const feedback = {
+                    rating: selectedRating,
+                    comments: comments.value
+                };
+
+                // Aquí puedes usar fetch para enviar los datos al backend
+                console.log("Enviando datos:", feedback);
+
+                // Mostrar mensaje de éxito
+                successMessage.style.display = "block";
+
+                // Reiniciar formulario
+                setTimeout(() => {
+                    successMessage.style.display = "none";
+                    stars.forEach(s => s.classList.remove("selected"));
+                    selectedRating = 0;
+                    comments.value = "";
+                }, 2000);
+            });
         });
-    });
     </script>
-    
-
 </body>
 </html>

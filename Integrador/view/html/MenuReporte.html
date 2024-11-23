@@ -20,6 +20,19 @@
             <button id="satisfaction">Tasa de Satisfacción</button>
             <button id="cancellation">Tasa de Cancelación</button>
             <button id="responseTime">Tiempo Promedio de Respuesta</button>
+            <button id="sales">Reporte de Ventas</button> <!-- Nuevo botón -->
+        </div>
+
+        <!-- Filtro de Meses -->
+        <div class="filter">
+            <label for="monthFilter">Seleccionar Mes:</label>
+            <select id="monthFilter">
+                <option value="Agosto">Agosto</option>
+                <option value="Septiembre">Septiembre</option>
+                <option value="Octubre">Octubre</option>
+                <option value="Noviembre">Noviembre</option>
+                <option value="Diciembre">Diciembre</option>
+            </select>
         </div>
 
         <!-- Área de reportes -->
@@ -35,6 +48,13 @@
                 </select>
             </div>
             <canvas id="reportChart"></canvas>
+
+            <!-- Botones de reporte -->
+            <div class="report-buttons">
+                <button id="maxReport">Máximo</button>
+                <button id="minReport">Mínimo</button>
+                <button id="averageReport">Promedio</button>
+            </div>
 
             <!-- Botones de descarga -->
             <div class="download">
@@ -63,6 +83,10 @@
             responseTime: {
                 labels: ['Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
                 data: [1.2, 1.1, 1.0, 0.9, 0.8] // Tiempos promedio en segundos
+            },
+            sales: {
+                labels: ['Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                data: [1000, 1200, 1100, 1300, 1400] // Ventas en unidades monetarias
             }
         };
 
@@ -99,6 +123,24 @@
             });
         }
 
+        // Función para calcular el máximo, mínimo y promedio
+        function calculateReport(type) {
+            const dataset = dataSets[type];
+            let result;
+            switch (type) {
+                case 'max':
+                    result = Math.max(...dataSets.sales.data);
+                    break;
+                case 'min':
+                    result = Math.min(...dataSets.sales.data);
+                    break;
+                case 'average':
+                    result = dataSets.sales.data.reduce((a, b) => a + b, 0) / dataSets.sales.data.length;
+                    break;
+            }
+            alert(`El ${type} de ventas es: ${result}`);
+        }
+
         // Eventos de los botones
         document.getElementById('satisfaction').addEventListener('click', () => {
             const chartType = document.getElementById('chartType').value;
@@ -113,6 +155,23 @@
         document.getElementById('responseTime').addEventListener('click', () => {
             const chartType = document.getElementById('chartType').value;
             createChart(chartType, dataSets.responseTime);
+        });
+
+        document.getElementById('sales').addEventListener('click', () => {
+            const chartType = document.getElementById('chartType').value;
+            createChart(chartType, dataSets.sales);
+        });
+
+        document.getElementById('maxReport').addEventListener('click', () => {
+            calculateReport('max');
+        });
+
+        document.getElementById('minReport').addEventListener('click', () => {
+            calculateReport('min');
+        });
+
+        document.getElementById('averageReport').addEventListener('click', () => {
+            calculateReport('average');
         });
 
         // Descargar PDF

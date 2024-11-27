@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menú de Reportes - Salón de Belleza</title>
-    <!-- Enlace al archivo CSS -->
     <link rel="stylesheet" href="../css/Reporte.css">
-    <!-- Bibliotecas JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -15,15 +13,13 @@
     <h1>Menú de Reportes - Salón de Belleza</h1>
 
     <div class="container">
-        <!-- Menú de botones -->
         <div class="menu">
             <button id="satisfaction">Tasa de Satisfacción</button>
             <button id="cancellation">Tasa de Cancelación</button>
             <button id="responseTime">Tiempo Promedio de Respuesta</button>
-            <button id="sales">Reporte de Ventas</button> <!-- Nuevo botón -->
+            <button id="sales">Reporte de Ventas</button>
         </div>
 
-        <!-- Filtro de Meses -->
         <div class="filter">
             <label for="monthFilter">Seleccionar Mes:</label>
             <select id="monthFilter">
@@ -35,7 +31,6 @@
             </select>
         </div>
 
-        <!-- Área de reportes -->
         <div class="report-area">
             <div class="selection">
                 <label for="chartType">Seleccionar Tipo de Gráfico:</label>
@@ -49,14 +44,12 @@
             </div>
             <canvas id="reportChart"></canvas>
 
-            <!-- Botones de reporte -->
             <div class="report-buttons">
                 <button id="maxReport">Máximo</button>
                 <button id="minReport">Mínimo</button>
                 <button id="averageReport">Promedio</button>
             </div>
 
-            <!-- Botones de descarga -->
             <div class="download">
                 <button id="downloadPdf">Descargar PDF</button>
                 <button id="downloadExcel">Descargar Excel</button>
@@ -64,14 +57,12 @@
         </div>
     </div>
 
-    <!-- Script JS -->
     <script>
-        // Variables globales
         let chart;
         const chartContext = document.getElementById('reportChart').getContext('2d');
 
-        // Datos de ejemplo (pueden conectarse a una base de datos más adelante)
-        const dataSets = {
+        // Datos de ejemplo (estos serán reemplazados por la API)
+        let dataSets = {
             satisfaction: {
                 labels: ['Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
                 data: [75, 80, 85, 90, 92]
@@ -82,17 +73,33 @@
             },
             responseTime: {
                 labels: ['Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-                data: [1.2, 1.1, 1.0, 0.9, 0.8] // Tiempos promedio en segundos
+                data: [1.2, 1.1, 1.0, 0.9, 0.8]
             },
             sales: {
                 labels: ['Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-                data: [1000, 1200, 1100, 1300, 1400] // Ventas en unidades monetarias
+                data: [1000, 1200, 1100, 1300, 1400]
             }
         };
 
+        // Función para obtener los datos de la API
+        async function fetchSalesData() {
+            try {
+                const response = await fetch('http://localhost:3000/api/reportes/ventas');
+                const data = await response.json();
+                // Asignar los datos a la variable sales
+                dataSets.sales = {
+                    labels: data.map(item => item.mes),
+                    data: data.map(item => item.ventas)
+                };
+                console.log(dataSets.sales); // Ver los datos obtenidos
+            } catch (error) {
+                console.error('Error al obtener los datos de ventas:', error);
+            }
+        }
+
         // Crear el gráfico
         function createChart(type, dataset) {
-            if (chart) chart.destroy(); // Destruir gráfico existente
+            if (chart) chart.destroy();
             chart = new Chart(chartContext, {
                 type: type,
                 data: {
@@ -123,24 +130,6 @@
             });
         }
 
-        // Función para calcular el máximo, mínimo y promedio
-        function calculateReport(type) {
-            const dataset = dataSets[type];
-            let result;
-            switch (type) {
-                case 'max':
-                    result = Math.max(...dataSets.sales.data);
-                    break;
-                case 'min':
-                    result = Math.min(...dataSets.sales.data);
-                    break;
-                case 'average':
-                    result = dataSets.sales.data.reduce((a, b) => a + b, 0) / dataSets.sales.data.length;
-                    break;
-            }
-            alert(`El ${type} de ventas es: ${result}`);
-        }
-
         // Eventos de los botones
         document.getElementById('satisfaction').addEventListener('click', () => {
             const chartType = document.getElementById('chartType').value;
@@ -162,38 +151,27 @@
             createChart(chartType, dataSets.sales);
         });
 
-        document.getElementById('maxReport').addEventListener('click', () => {
-            calculateReport('max');
-        });
-
-        document.getElementById('minReport').addEventListener('click', () => {
-            calculateReport('min');
-        });
-
-        document.getElementById('averageReport').addEventListener('click', () => {
-            calculateReport('average');
-        });
-
         // Descargar PDF
         document.getElementById('downloadPdf').addEventListener('click', () => {
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF();
             pdf.text('Reporte del Salón de Belleza', 10, 10);
-            pdf.addImage(chart.toBase64Image(), 'PNG', 15, 30, 180, 100);
             pdf.save('reporte.pdf');
         });
 
         // Descargar Excel
         document.getElementById('downloadExcel').addEventListener('click', () => {
+            const ws = XLSX.utils.json_to_sheet([{
+                mes: 'Agosto',
+                ventas: 1000
+            }]); // Ejemplo de datos para exportar
             const wb = XLSX.utils.book_new();
-            const wsData = chart.data.labels.map((label, index) => [
-                label, chart.data.datasets[0].data[index]
-            ]);
-            wsData.unshift(['Mes', 'Valor']); // Encabezado
-            const ws = XLSX.utils.aoa_to_sheet(wsData);
             XLSX.utils.book_append_sheet(wb, ws, 'Reporte');
             XLSX.writeFile(wb, 'reporte.xlsx');
         });
+
+        // Inicializar con los datos de ventas
+        fetchSalesData();
     </script>
 </body>
 </html>

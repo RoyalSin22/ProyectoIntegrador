@@ -3,175 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú de Reportes - Salón de Belleza</title>
+    <title>Menú de Reportes de Ventas</title>
     <link rel="stylesheet" href="../css/Reporte.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-    <h1>Menú de Reportes - Salón de Belleza</h1>
+    <!-- Barra lateral del menú -->
+    <div class="sidebar">
+        <h2>Menú de Reportes - Salon de Belleza Maria Elena</h2>
+        <ul>
+            <li><button id="ventasReporte">Reporte de Ventas</button></li>
+            <li><button id="satisfaccionReporte">Tasa de Satisfacción</button></li>
+            <li><button id="cancelacionReporte">Tasa de Cancelación</button></li>
+            <li><button id="tiempoReporte">Tiempo Promedio de Respuesta</button></li>
+            <li><button id="volver">Volver</button></li>
+        </ul>
+    </div>
 
-    <div class="container">
-        <div class="menu">
-            <button id="satisfaction">Tasa de Satisfacción</button>
-            <button id="cancellation">Tasa de Cancelación</button>
-            <button id="responseTime">Tiempo Promedio de Respuesta</button>
-            <button id="sales">Reporte de Ventas</button>
-        </div>
-
+    <!-- Contenido principal de los reportes -->
+    <div class="main-content">
+        <h1>Reporte de Ventas</h1>
         <div class="filter">
             <label for="monthFilter">Seleccionar Mes:</label>
             <select id="monthFilter">
                 <option value="Agosto">Agosto</option>
-                <option value="Septiembre">Septiembre</option>
+                <option value="Setiembre">Setiembre</option>
                 <option value="Octubre">Octubre</option>
                 <option value="Noviembre">Noviembre</option>
                 <option value="Diciembre">Diciembre</option>
             </select>
         </div>
+        
+        <!-- Canvas para los gráficos -->
+        <div class="chart-container">
+            <canvas id="salesChart"></canvas>
+        </div>
 
-        <div class="report-area">
-            <div class="selection">
-                <label for="chartType">Seleccionar Tipo de Gráfico:</label>
-                <select id="chartType">
-                    <option value="doughnut">Doughnut</option>
-                    <option value="polarArea">Polar Area</option>
-                    <option value="pie">Pie</option>
-                    <option value="line">Linear</option>
-                    <option value="bar">Bar</option>
-                </select>
-            </div>
-            <canvas id="reportChart"></canvas>
-
-            <div class="report-buttons">
-                <button id="maxReport">Máximo</button>
-                <button id="minReport">Mínimo</button>
-                <button id="averageReport">Promedio</button>
-            </div>
-
-            <div class="download">
-                <button id="downloadPdf">Descargar PDF</button>
-                <button id="downloadExcel">Descargar Excel</button>
-            </div>
+        <!-- Botones de acción -->
+        <div class="report-buttons">
+            <button id="generatePDF">Generar Reporte PDF</button>
+            <button id="downloadExcel">Descargar Excel</button>
         </div>
     </div>
 
-    <script>
-        let chart;
-        const chartContext = document.getElementById('reportChart').getContext('2d');
-
-        // Datos de ejemplo (estos serán reemplazados por la API)
-        let dataSets = {
-            satisfaction: {
-                labels: ['Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-                data: [75, 80, 85, 90, 92]
-            },
-            cancellation: {
-                labels: ['Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-                data: [10, 8, 7, 6, 5]
-            },
-            responseTime: {
-                labels: ['Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-                data: [1.2, 1.1, 1.0, 0.9, 0.8]
-            },
-            sales: {
-                labels: ['Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-                data: [1000, 1200, 1100, 1300, 1400]
-            }
-        };
-
-        // Función para obtener los datos de la API
-        async function fetchSalesData() {
-            try {
-                const response = await fetch('http://localhost:3000/api/reportes/ventas');
-                const data = await response.json();
-                // Asignar los datos a la variable sales
-                dataSets.sales = {
-                    labels: data.map(item => item.mes),
-                    data: data.map(item => item.ventas)
-                };
-                console.log(dataSets.sales); // Ver los datos obtenidos
-            } catch (error) {
-                console.error('Error al obtener los datos de ventas:', error);
-            }
-        }
-
-        // Crear el gráfico
-        function createChart(type, dataset) {
-            if (chart) chart.destroy();
-            chart = new Chart(chartContext, {
-                type: type,
-                data: {
-                    labels: dataset.labels,
-                    datasets: [{
-                        label: 'Datos del Reporte',
-                        data: dataset.data,
-                        backgroundColor: ['#6a63ff', '#ff63aa', '#f8ff63', '#63ffb8', '#ffb863'],
-                        borderColor: '#ffffff',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top'
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(tooltipItem) {
-                                    return `${tooltipItem.label}: ${tooltipItem.raw}%`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        // Eventos de los botones
-        document.getElementById('satisfaction').addEventListener('click', () => {
-            const chartType = document.getElementById('chartType').value;
-            createChart(chartType, dataSets.satisfaction);
-        });
-
-        document.getElementById('cancellation').addEventListener('click', () => {
-            const chartType = document.getElementById('chartType').value;
-            createChart(chartType, dataSets.cancellation);
-        });
-
-        document.getElementById('responseTime').addEventListener('click', () => {
-            const chartType = document.getElementById('chartType').value;
-            createChart(chartType, dataSets.responseTime);
-        });
-
-        document.getElementById('sales').addEventListener('click', () => {
-            const chartType = document.getElementById('chartType').value;
-            createChart(chartType, dataSets.sales);
-        });
-
-        // Descargar PDF
-        document.getElementById('downloadPdf').addEventListener('click', () => {
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF();
-            pdf.text('Reporte del Salón de Belleza', 10, 10);
-            pdf.save('reporte.pdf');
-        });
-
-        // Descargar Excel
-        document.getElementById('downloadExcel').addEventListener('click', () => {
-            const ws = XLSX.utils.json_to_sheet([{
-                mes: 'Agosto',
-                ventas: 1000
-            }]); // Ejemplo de datos para exportar
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'Reporte');
-            XLSX.writeFile(wb, 'reporte.xlsx');
-        });
-
-        // Inicializar con los datos de ventas
-        fetchSalesData();
-    </script>
+    <script src="../model/reporte.js"></script>
 </body>
 </html>

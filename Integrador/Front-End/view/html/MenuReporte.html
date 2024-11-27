@@ -11,12 +11,15 @@
 <body>
     <!-- Barra lateral del menú -->
     <div class="sidebar">
-        <h2>Menú de Reportes - Salon de Belleza Maria Elena</h2>
+        <h2>Menú de Reportes - Salón de Belleza María Elena</h2>
         <ul>
             <li><button id="ventasReporte">Reporte de Ventas</button></li>
             <li><button id="satisfaccionReporte">Tasa de Satisfacción</button></li>
             <li><button id="cancelacionReporte">Tasa de Cancelación</button></li>
             <li><button id="tiempoReporte">Tiempo Promedio de Respuesta</button></li>
+            <li><button id="clientesReporte">Listar Clientes</button></li>
+            <li><button id="empleadosReporte">Listar Empleados</button></li>
+            <li><button id="serviciosReporte">Listar Servicios</button></li>
             <li><button id="volver">Volver</button></li>
         </ul>
     </div>
@@ -24,6 +27,8 @@
     <!-- Contenido principal de los reportes -->
     <div class="main-content">
         <h1>Reporte de Ventas</h1>
+
+        <!-- Filtros y selección -->
         <div class="filter">
             <label for="monthFilter">Seleccionar Mes:</label>
             <select id="monthFilter">
@@ -33,8 +38,15 @@
                 <option value="Noviembre">Noviembre</option>
                 <option value="Diciembre">Diciembre</option>
             </select>
+
+            <label for="chartType">Tipo de Gráfico:</label>
+            <select id="chartType">
+                <option value="bar">Barra</option>
+                <option value="pie">Pie</option>
+                <option value="doughnut">Doughnut</option>
+            </select>
         </div>
-        
+
         <!-- Canvas para los gráficos -->
         <div class="chart-container">
             <canvas id="salesChart"></canvas>
@@ -44,9 +56,160 @@
         <div class="report-buttons">
             <button id="generatePDF">Generar Reporte PDF</button>
             <button id="downloadExcel">Descargar Excel</button>
+            <button id="calculateStats">Calcular Promedio, Mínimo, Máximo</button>
+        </div>
+
+        <!-- Tabla para mostrar los resultados de los reportes -->
+        <div id="reportTable" style="display: none;">
+            <h2>Listado de Reportes</h2>
+            <table id="reportDataTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Información</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Aquí se insertarán los datos dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Estadísticas calculadas -->
+        <div id="statistics" style="display: none;">
+            <h2>Estadísticas</h2>
+            <p>Promedio: <span id="avgValue"></span></p>
+            <p>Máximo: <span id="maxValue"></span></p>
+            <p>Mínimo: <span id="minValue"></span></p>
         </div>
     </div>
 
     <script src="../model/reporte.js"></script>
+    <script>
+        // Variables globales
+        let salesData = [];
+        let currentChartType = 'bar'; // Tipo de gráfico por defecto
+        let chartInstance;
+
+        // Inicialización del gráfico
+        function renderChart(data) {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            if (chartInstance) {
+                chartInstance.destroy();  // Destruir el gráfico anterior
+            }
+            
+            chartInstance = new Chart(ctx, {
+                type: currentChartType,  // Tipo de gráfico actual
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Ventas',
+                        data: data.values,
+                        backgroundColor: currentChartType === 'pie' || currentChartType === 'doughnut' 
+                                            ? ['#FF5733', '#33FF57', '#3357FF'] 
+                                            : '#4e73df',
+                        borderColor: currentChartType === 'pie' || currentChartType === 'doughnut' 
+                                            ? ['#c13e31', '#30cc38', '#2e4ebc']
+                                            : '#1c3d5a',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return `Ventas: ${tooltipItem.raw}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Manejar cambio de tipo de gráfico
+        document.getElementById('chartType').addEventListener('change', function() {
+            currentChartType = this.value;
+            renderChart(salesData);  // Redibujar gráfico con el nuevo tipo
+        });
+
+        // Manejar cambio de mes
+        document.getElementById('monthFilter').addEventListener('change', function() {
+            const month = this.value;
+            fetchSalesData(month);
+        });
+
+        // Función para obtener los datos de ventas
+        function fetchSalesData(month) {
+            fetch(`/api/ventas?month=${month}`)
+                .then(response => response.json())
+                .then(data => {
+                    salesData = {
+                        labels: data.labels,
+                        values: data.values
+                    };
+                    renderChart(salesData);
+                })
+                .catch(error => {
+                    console.error('Error al obtener los datos de ventas:', error);
+                });
+        }
+
+        // Botón de calcular estadísticas
+        document.getElementById('calculateStats').addEventListener('click', function() {
+            const values = salesData.values;
+
+            if (values && values.length > 0) {
+                const avg = values.reduce((a, b) => a + b, 0) / values.length;
+                const max = Math.max(...values);
+                const min = Math.min(...values);
+
+                document.getElementById('avgValue').textContent = avg.toFixed(2);
+                document.getElementById('maxValue').textContent = max;
+                document.getElementById('minValue').textContent = min;
+                document.getElementById('statistics').style.display = 'block';
+            }
+        });
+
+        // Función para descargar el reporte PDF
+        document.getElementById('generatePDF').addEventListener('click', function() {
+            const doc = new jsPDF();
+            doc.text('Reporte de Ventas', 10, 10);
+            doc.text(`Mes: ${document.getElementById('monthFilter').value}`, 10, 20);
+            // Puedes agregar más contenido al PDF según sea necesario
+            doc.save('reporte_ventas.pdf');
+        });
+
+        // Función para descargar el reporte Excel (lógica básica)
+        document.getElementById('downloadExcel').addEventListener('click', function() {
+            const table = document.getElementById('reportDataTable');
+            let csvContent = "data:text/csv;charset=utf-8,";
+            const rows = table.querySelectorAll('tr');
+
+            rows.forEach((row, index) => {
+                const cols = row.querySelectorAll('td, th');
+                const rowData = [];
+                cols.forEach(col => {
+                    rowData.push(col.textContent);
+                });
+                csvContent += rowData.join(",") + "\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', 'reporte_ventas.csv');
+            link.click();
+        });
+
+        // Llamar a la función de ventas por defecto al cargar la página
+        fetchSalesData('Agosto');  // Cargar el reporte por defecto para el mes de agosto
+    </script>
 </body>
 </html>

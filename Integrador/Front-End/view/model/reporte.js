@@ -53,3 +53,9 @@ document.getElementById('generatePDF').addEventListener('click', () => {
 document.getElementById('volver').addEventListener('click', () => {
     window.location.href = "../html/index.html";  // Cambiar la URL de la página
 });
+
+// Manejar cambio de tipo de gráfico
+document.getElementById('chartType').addEventListener('change', function() {
+    currentChartType = this.value;  // Asigna el nuevo tipo de gráfico
+    renderChart(salesData);  // Redibuja el gráfico con el tipo seleccionado
+});

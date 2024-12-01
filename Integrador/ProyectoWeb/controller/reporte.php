@@ -1,63 +1,66 @@
 <?php
-// Incluir la conexión
-include('conexion.php');
+// Incluir la conexión a la base de datos
+include_once 'conexion.php';
 
-// Obtener el tipo de reporte de la URL
-$reporte = isset($_GET['reporte']) ? $_GET['reporte'] : '';
+// Verificar si el parámetro 'reporte' está en la URL
+if (isset($_GET['reporte'])) {
+    // Obtener el nombre del reporte a generar
+    $reporte = $_GET['reporte'];
 
-// Ruta al archivo JasperReport .jasper según el tipo de reporte
-switch ($reporte) {
-    case 'cliente':
-        $jasperFile = '../reportes/ReporteCliente.jasper';
-        break;
-    case 'empleado':
-        $jasperFile = '../reportes/ReporteEmpleado.jasper';
-        break;
-    case 'servicio':
-        $jasperFile = '../reportes/ReporteServicio.jasper';
-        break;
-    case 'satisfaccion':
-        $jasperFile = '../reportes/ReporteSatisfaccion.jasper';
-        break;
-    case 'respuesta_promedio':
-        $jasperFile = '../reportes/ReporteRespuestaPromedio.jasper';
-        break;
-    case 'cancelacion':
-        $jasperFile = '../reportes/ReporteCancelacion.jasper';
-        break;
-    case 'venta':
-        $jasperFile = '../reportes/ReporteVenta.jasper';
-        break;
-    default:
-        // Si no se encuentra el reporte, redirigir o mostrar un error
-        echo "Reporte no encontrado.";
+    // Ruta al archivo JasperStarter (ajusta esto según donde lo hayas instalado)
+    $jasperstarter = "/path/to/jasperstarter/bin/jasperstarter";
+
+    // Dependiendo del reporte solicitado, asignamos la ruta al archivo .jasper
+    switch ($reporte) {
+        case 'cliente':
+            $reporteFile = "/ProyectoWeb/reportes/ReporteCliente.jasper";
+            $salidaFile = "/ProyectoWeb/reportes/ReporteCliente.pdf";
+            break;
+
+        case 'empleado':
+            $reporteFile = "/ProyectoWeb/reportes/ReporteEmpleado.jasper";
+            $salidaFile = "/ProyectoWeb/reportes/ReporteEmpleado.pdf";
+            break;
+
+        case 'servicio':
+            $reporteFile = "/ProyectoWeb/reportes/ReporteServicio.jasper";
+            $salidaFile = "/ProyectoWeb/reportes/ReporteServicio.pdf";
+            break;
+
+        case 'satisfaccion':
+            $reporteFile = "/ProyectoWeb/reportes/ReporteSatisfaccion.jasper";
+            $salidaFile = "/ProyectoWeb/reportes/ReporteSatisfaccion.pdf";
+            break;
+
+        case 'cancelacion':
+            $reporteFile = "/ProyectoWeb/reportes/ReporteCancelacion.jasper";
+            $salidaFile = "/ProyectoWeb/reportes/ReporteCancelacion.pdf";
+            break;
+
+        default:
+            die("Reporte no encontrado.");
+    }
+
+    // Comando para ejecutar JasperReports usando JasperStarter y generar el PDF
+    $comando = "$jasperstarter pr $reporteFile -o $salidaFile";
+
+    // Ejecutar el comando en el servidor
+    $resultado = shell_exec($comando);
+
+    // Verificar si la ejecución fue exitosa
+    if ($resultado === NULL) {
+        echo "Error al generar el reporte.";
+    } else {
+        // Preparar el archivo para su descarga
+        header("Content-Type: application/pdf");
+        header("Content-Disposition: attachment; filename=" . basename($salidaFile));
+        header("Content-Length: " . filesize($salidaFile));
+
+        // Leer el archivo PDF y enviarlo al navegador
+        readfile($salidaFile);
         exit;
-}
-
-// Parámetros de conexión JDBC para JasperReports
-$driver = "com.mysql.cj.jdbc.Driver";
-$url = "jdbc:mysql://$host:$port/$dbname"; // URL de conexión a MySQL
-$params = array(
-    "usuario" => $username,
-    "password" => $password,
-    "host" => $host,
-    "dbname" => $dbname
-);
-
-// Comando para ejecutar el reporte Jasper
-exec("java -cp ../libs/jasperreports-7.0.1.jar:./libs/mysql-connector-java-5.1.48.jar net.sf.jasperreports.jrxmldb.JRXmlLoader load -url $url -driver $driver -user $username -password $password -report $jasperFile");
-
-// Generación del archivo PDF
-$pdfOutput = "../reportes/reporte_" . $reporte . ".pdf";
-exec("java -jar ../libs/jasperreports-7.0.1.jar -o $pdfOutput -f pdf -param usuario=$username -param password=$password");
-
-// Redirigir para descargar el reporte en PDF
-if (file_exists($pdfOutput)) {
-    header('Content-Type: application/pdf');
-    header('Content-Disposition: attachment; filename="reporte_' . $reporte . '.pdf"');
-    readfile($pdfOutput);
-    exit;
+    }
 } else {
-    echo "Error al generar el reporte.";
+    echo "No se ha especificado un reporte.";
 }
 ?>

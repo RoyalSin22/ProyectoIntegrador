@@ -4,44 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menú de Reportes</title>
-    <link rel="stylesheet" href="./css/Reporte.css">
+    <link rel="stylesheet" href="../css/Reporte.css">
 </head>
 <body>
-    <!-- Sidebar con las opciones de reportes -->
     <div class="sidebar">
         <h2>Menú de Reportes</h2>
         <ul>
-          <li><a href="../controller/reporte.php?reporte=cliente">Reporte de Clientes</a></li>
-          <li><a href="../controller/reporte.php?reporte=empleado">Reporte de Especialistas</a></li>
-          <li><a href="../controller/reporte.php?reporte=servicio">Reporte de Servicios</a></li>
-          <li><a href="../controller/reporte.php?reporte=satisfaccion">Reporte de Satisfacción de los Clientes</a></li>
-          <li><a href="../controller/reporte.php?reporte=respuesta_promedio">Reporte de Tiempo Promedio de Respuesta del Sistema</a></li>
-          <li><a href="../controller/reporte.php?reporte=cancelacion">Reporte de Porcentaje de Cancelaciones</a></li>
-          <li><a href="../controller/reporte.php?reporte=venta">Reporte de Ventas</a></li>
-      </ul>
-      
+            <li><a href="../controller/reporte.php?reporte=cliente">Reporte de Clientes</a></li>
+            <li><a href="../controller/reporte.php?reporte=empleado">Reporte de Empleados</a></li>
+            <li><a href="../controller/reporte.php?reporte=servicio">Reporte de Servicios</a></li>
+            <li><a href="../controller/reporte.php?reporte=satisfaccion">Reporte de Satisfacción</a></li>
+            <li><a href="../controller/reporte.php?reporte=cancelacion">Reporte de Cancelaciones</a></li>
+        </ul>
     </div>
-
-    <!-- Contenido del reporte -->
-    <div class="content">
-        <h1>Seleccione un reporte para descargar</h1>
-
-        <!-- Incluir el reporte PDF aquí -->
-        <div id="reporte-contenido">
-            <!-- El contenido del reporte se mostrará aquí -->
-        </div>
-    </div>
-
-    <script>
-        // Este script maneja la redirección para descargar el reporte en formato PDF
-        document.querySelectorAll("a").forEach(function(link) {
-            link.addEventListener("click", function(event) {
-                event.preventDefault();
-                let reporteTipo = this.getAttribute("href").split('=')[1];
-                let url = 'reporte.php?reporte=' + reporteTipo; // Llamar a reporte.php con el tipo de reporte
-                window.location.href = url; // Redirigir para descargar el reporte
-            });
-        });
-    </script>
 </body>
 </html>

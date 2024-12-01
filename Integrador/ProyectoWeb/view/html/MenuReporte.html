@@ -1,153 +1,47 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Menú de Reportes</title>
-  <link rel="stylesheet" href="../css/Reporte.css">
-  <style>
-   
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú de Reportes</title>
+    <link rel="stylesheet" href="./css/Reporte.css">
 </head>
 <body>
-  <button class="toggle-menu" onclick="toggleSidebar()">☰</button>
-
-  <div class="sidebar" id="sidebar">
-    <button onclick="selectReport('ventas')">Reporte de Ventas</button>
-    <button onclick="selectReport('clientes')">Reporte de Clientes</button>
-    <button onclick="selectReport('inventario')">Reporte de Inventario</button>    
-  </div>
-
-  <div class="main-content" id="mainContent">
-    <h1>Menú de Reportes</h1>
-
-    <div>
-      <label for="month">Seleccione el mes:</label>
-      <input type="month" id="month" onchange="validateDate()">
+    <!-- Sidebar con las opciones de reportes -->
+    <div class="sidebar">
+        <h2>Menú de Reportes</h2>
+        <ul>
+          <li><a href="../controller/reporte.php?reporte=cliente">Reporte de Clientes</a></li>
+          <li><a href="../controller/reporte.php?reporte=empleado">Reporte de Especialistas</a></li>
+          <li><a href="../controller/reporte.php?reporte=servicio">Reporte de Servicios</a></li>
+          <li><a href="../controller/reporte.php?reporte=satisfaccion">Reporte de Satisfacción de los Clientes</a></li>
+          <li><a href="../controller/reporte.php?reporte=respuesta_promedio">Reporte de Tiempo Promedio de Respuesta del Sistema</a></li>
+          <li><a href="../controller/reporte.php?reporte=cancelacion">Reporte de Porcentaje de Cancelaciones</a></li>
+          <li><a href="../controller/reporte.php?reporte=venta">Reporte de Ventas</a></li>
+      </ul>
+      
     </div>
 
-    <div>
-      <label for="chartType">Seleccione el tipo de gráfico:</label>
-      <select id="chartType" onchange="updateChartType()">
-        <option value="bar">Barras</option>
-        <option value="line">Líneas</option>
-        <option value="pie">Pastel</option>
-      </select>
+    <!-- Contenido del reporte -->
+    <div class="content">
+        <h1>Seleccione un reporte para descargar</h1>
+
+        <!-- Incluir el reporte PDF aquí -->
+        <div id="reporte-contenido">
+            <!-- El contenido del reporte se mostrará aquí -->
+        </div>
     </div>
 
-    <canvas id="chartCanvas"></canvas>
-
-    <div>
-      <button class="btn" onclick="generatePDF()">Generar PDF</button>
-      <button class="btn" onclick="calculateStatistics()">Calcular Estadísticas</button>
-    </div>
-
-    <div id="statistics">
-      <p>Promedio: <span id="average"></span></p>
-      <p>Mínimo: <span id="minimum"></span></p>
-      <p>Máximo: <span id="maximum"></span></p>
-    </div>
-  </div>
-
-  <script>
-    let sidebarOpen = false;
-
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      const mainContent = document.getElementById('mainContent');
-
-      sidebarOpen = !sidebarOpen;
-      sidebar.classList.toggle('open', sidebarOpen);
-      mainContent.classList.toggle('expanded', sidebarOpen);
-    }
-
-    const ctx = document.getElementById('chartCanvas').getContext('2d');
-    let chart;
-
-    function renderChart(data, type = 'bar') {
-      if (chart) chart.destroy();
-      chart = new Chart(ctx, {
-        type,
-        data: {
-          labels: data.labels,
-          datasets: [{
-            label: 'Datos del reporte',
-            data: data.values,
-            backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
-            borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              display: true,
-              position: 'top'
-            }
-          }
-        }
-      });
-    }
-
-    function validateDate() {
-      const month = document.getElementById('month').value;
-      if (!month) {
-        alert('Por favor, seleccione un mes válido.');
-      }
-    }
-
-// Función para obtener datos del backend
-async function fetchData(reportType) {
-  try {
-    const response = await fetch(`autorack.proxy.rlwy.net:20200/reportes${reportType}`);
-    if (!response.ok) {
-      throw new Error('Error al obtener los datos del servidor');
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error:', error);
-    alert('Hubo un problema al obtener los datos. Intente de nuevo.');
-  }
-}
-
-// Función para actualizar el gráfico con datos desde la API
-async function updateChartType() {
-  const chartType = document.getElementById('chartType').value;
-  const reportType = 'ventas'; // Cambiar dinámicamente según sea necesario
-
-  const data = await fetchData(reportType);
-  if (data) {
-    renderChart(data, chartType);
-  }
-}
-async function selectReport(reportType) {
-  const chartType = document.getElementById('chartType').value;
-  const data = await fetchData(reportType);
-  if (data) {
-    renderChart(data, chartType);
-  }
-}
-
-    function generatePDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      doc.text('Reporte de Datos', 10, 10);
-      doc.save('reporte.pdf');
-    }
-
-    function calculateStatistics() {
-      const values = [10, 20, 30];
-      document.getElementById('average').textContent = (values.reduce((a, b) => a + b, 0) / values.length).toFixed(2);
-      document.getElementById('minimum').textContent = Math.min(...values);
-      document.getElementById('maximum').textContent = Math.max(...values);
-    }
-
-    // Render initial chart
-    updateChartType();
-  </script>
+    <script>
+        // Este script maneja la redirección para descargar el reporte en formato PDF
+        document.querySelectorAll("a").forEach(function(link) {
+            link.addEventListener("click", function(event) {
+                event.preventDefault();
+                let reporteTipo = this.getAttribute("href").split('=')[1];
+                let url = 'reporte.php?reporte=' + reporteTipo; // Llamar a reporte.php con el tipo de reporte
+                window.location.href = url; // Redirigir para descargar el reporte
+            });
+        });
+    </script>
 </body>
 </html>

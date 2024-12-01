@@ -1,21 +1,102 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú de Reportes</title>
+    <title>Sistema de Reportes - Salón de Belleza</title>
+    <!-- Vinculación de Bootstrap para diseño responsivo -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/Reporte.css">
 </head>
+
 <body>
-    <div class="sidebar">
-        <h2>Menú de Reportes</h2>
-        <ul>
-            <li><a href="../controller/reporte.php?reporte=cliente">Reporte de Clientes</a></li>
-            <li><a href="../controller/reporte.php?reporte=empleado">Reporte de Empleados</a></li>
-            <li><a href="../controller/reporte.php?reporte=servicio">Reporte de Servicios</a></li>
-            <li><a href="../controller/reporte.php?reporte=satisfaccion">Reporte de Satisfacción</a></li>
-            <li><a href="../controller/reporte.php?reporte=cancelacion">Reporte de Cancelaciones</a></li>
-        </ul>
+    <div class="container-fluid">
+        <!-- Barra de navegación -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.html">Salón de Belleza</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <button class="btn btn-outline-light" id="btnDescargar">Descargar Reporte</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 p-3 bg-light sidebar">
+                <h4 class="text-center mb-4">Reportes</h4>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <button class="nav-link active" id="btnClientes">Listado de Clientes</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="btnEmpleados">Listado de Empleados</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="btnServicios">Listado de Servicios</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="btnCancelaciones">Cancelaciones Totales</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="btnSatisfaccion">Reporte de Satisfacción</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="btnRespuesta">Reporte de Tiempo Promedio de Respuesta del Sistema</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="btnVentas">Reporte de Ventas</button>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Contenedor principal de reportes -->
+            <main class="col-md-9 col-lg-10 px-4">
+                <div class="tab-content" id="reportTabContent">
+                    <div class="tab-pane fade show active" id="clientesTab" role="tabpanel">
+                        <h3>Lista de Datos</h3>
+                        <div id="reportContent">
+                            <p>Seleccione un reporte desde el menú lateral para ver los detalles.</p>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="empleadosTab" role="tabpanel">
+                        <h3>Empleados</h3>
+                        <div id="reportContentEmpleados"></div>
+                    </div>
+                    <div class="tab-pane fade" id="serviciosTab" role="tabpanel">
+                        <h3>Servicios</h3>
+                        <div id="reportContentServicios"></div>
+                    </div>
+                    <div class="tab-pane fade" id="cancelacionesTab" role="tabpanel">
+                        <h3>Cancelaciones Totales</h3>
+                        <p>Datos sobre cancelaciones.</p>
+                    </div>
+                    <div class="tab-pane fade" id="satisfaccionTab" role="tabpanel">
+                        <h3>Reporte de Satisfacción</h3>
+                        <p>Detalles sobre la satisfacción del cliente.</p>
+                    </div>
+                    <div class="tab-pane fade" id="ventasTab" role="tabpanel">
+                        <h3>Reporte de Ventas</h3>
+                        <p>Detalles sobre las ventas del salón.</p>
+                    </div>
+                </div>
+            </main>
+        </div>
     </div>
+
+    <!-- Vinculación de Bootstrap y funciones adicionales -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script src="../js/scripts.js"></script>
 </body>
+
 </html>

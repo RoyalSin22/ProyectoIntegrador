@@ -1,215 +1,153 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú de Reportes de Ventas</title>
-    <link rel="stylesheet" href="../css/Reporte.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menú de Reportes</title>
+  <link rel="stylesheet" href="../css/Reporte.css">
+  <style>
+   
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-    <!-- Barra lateral del menú -->
-    <div class="sidebar">
-        <h2>Menú de Reportes - Salón de Belleza María Elena</h2>
-        <ul>
-            <li><button id="ventasReporte">Reporte de Ventas</button></li>
-            <li><button id="satisfaccionReporte">Tasa de Satisfacción</button></li>
-            <li><button id="cancelacionReporte">Tasa de Cancelación</button></li>
-            <li><button id="tiempoReporte">Tiempo Promedio de Respuesta</button></li>
-            <li><button id="clientesReporte">Listar Clientes</button></li>
-            <li><button id="empleadosReporte">Listar Empleados</button></li>
-            <li><button id="serviciosReporte">Listar Servicios</button></li>
-            <li><button id="volver">Volver</button></li>
-        </ul>
+  <button class="toggle-menu" onclick="toggleSidebar()">☰</button>
+
+  <div class="sidebar" id="sidebar">
+    <button onclick="selectReport('ventas')">Reporte de Ventas</button>
+    <button onclick="selectReport('clientes')">Reporte de Clientes</button>
+    <button onclick="selectReport('inventario')">Reporte de Inventario</button>    
+  </div>
+
+  <div class="main-content" id="mainContent">
+    <h1>Menú de Reportes</h1>
+
+    <div>
+      <label for="month">Seleccione el mes:</label>
+      <input type="month" id="month" onchange="validateDate()">
     </div>
 
-    <!-- Contenido principal de los reportes -->
-    <div class="main-content">
-        <h1>Reporte de Ventas</h1>
-
-        <!-- Filtros y selección -->
-        <div class="filter">
-            <label for="monthFilter">Seleccionar Mes:</label>
-            <select id="monthFilter">
-                <option value="Agosto">Agosto</option>
-                <option value="Setiembre">Setiembre</option>
-                <option value="Octubre">Octubre</option>
-                <option value="Noviembre">Noviembre</option>
-                <option value="Diciembre">Diciembre</option>
-            </select>
-
-            <label for="chartType">Tipo de Gráfico:</label>
-            <select id="chartType">
-                <option value="bar">Barra</option>
-                <option value="pie">Pie</option>
-                <option value="doughnut">Doughnut</option>
-            </select>
-        </div>
-
-        <!-- Canvas para los gráficos -->
-        <div class="chart-container">
-            <canvas id="salesChart"></canvas>
-        </div>
-
-        <!-- Botones de acción -->
-        <div class="report-buttons">
-            <button id="generatePDF">Generar Reporte PDF</button>
-            <button id="downloadExcel">Descargar Excel</button>
-            <button id="calculateStats">Calcular Promedio, Mínimo, Máximo</button>
-        </div>
-
-        <!-- Tabla para mostrar los resultados de los reportes -->
-        <div id="reportTable" style="display: none;">
-            <h2>Listado de Reportes</h2>
-            <table id="reportDataTable">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Información</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Aquí se insertarán los datos dinámicamente -->
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Estadísticas calculadas -->
-        <div id="statistics" style="display: none;">
-            <h2>Estadísticas</h2>
-            <p>Promedio: <span id="avgValue"></span></p>
-            <p>Máximo: <span id="maxValue"></span></p>
-            <p>Mínimo: <span id="minValue"></span></p>
-        </div>
+    <div>
+      <label for="chartType">Seleccione el tipo de gráfico:</label>
+      <select id="chartType" onchange="updateChartType()">
+        <option value="bar">Barras</option>
+        <option value="line">Líneas</option>
+        <option value="pie">Pastel</option>
+      </select>
     </div>
 
-    <script src="../model/reporte.js"></script>
-    <script>
-        // Variables globales
-        let salesData = [];
-        let currentChartType = 'bar'; // Tipo de gráfico por defecto
-        let chartInstance;
+    <canvas id="chartCanvas"></canvas>
 
-        // Inicialización del gráfico
-        function renderChart(data) {
-            const ctx = document.getElementById('salesChart').getContext('2d');
-            if (chartInstance) {
-                chartInstance.destroy();  // Destruir el gráfico anterior
+    <div>
+      <button class="btn" onclick="generatePDF()">Generar PDF</button>
+      <button class="btn" onclick="calculateStatistics()">Calcular Estadísticas</button>
+    </div>
+
+    <div id="statistics">
+      <p>Promedio: <span id="average"></span></p>
+      <p>Mínimo: <span id="minimum"></span></p>
+      <p>Máximo: <span id="maximum"></span></p>
+    </div>
+  </div>
+
+  <script>
+    let sidebarOpen = false;
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('mainContent');
+
+      sidebarOpen = !sidebarOpen;
+      sidebar.classList.toggle('open', sidebarOpen);
+      mainContent.classList.toggle('expanded', sidebarOpen);
+    }
+
+    const ctx = document.getElementById('chartCanvas').getContext('2d');
+    let chart;
+
+    function renderChart(data, type = 'bar') {
+      if (chart) chart.destroy();
+      chart = new Chart(ctx, {
+        type,
+        data: {
+          labels: data.labels,
+          datasets: [{
+            label: 'Datos del reporte',
+            data: data.values,
+            backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
+            borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top'
             }
-            
-            chartInstance = new Chart(ctx, {
-                type: currentChartType,  // Tipo de gráfico actual
-                data: {
-                    labels: data.labels,
-                    datasets: [{
-                        label: 'Ventas',
-                        data: data.values,
-                        backgroundColor: currentChartType === 'pie' || currentChartType === 'doughnut' 
-                                            ? ['#FF5733', '#33FF57', '#3357FF'] 
-                                            : '#4e73df',
-                        borderColor: currentChartType === 'pie' || currentChartType === 'doughnut' 
-                                            ? ['#c13e31', '#30cc38', '#2e4ebc']
-                                            : '#1c3d5a',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(tooltipItem) {
-                                    return `Ventas: ${tooltipItem.raw}`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
+          }
         }
+      });
+    }
 
-        // Manejar cambio de tipo de gráfico
-        document.getElementById('chartType').addEventListener('change', function() {
-            currentChartType = this.value;
-            renderChart(salesData);  // Redibujar gráfico con el nuevo tipo
-        });
+    function validateDate() {
+      const month = document.getElementById('month').value;
+      if (!month) {
+        alert('Por favor, seleccione un mes válido.');
+      }
+    }
 
-        // Manejar cambio de mes
-        document.getElementById('monthFilter').addEventListener('change', function() {
-            const month = this.value;
-            fetchSalesData(month);
-        });
+// Función para obtener datos del backend
+async function fetchData(reportType) {
+  try {
+    const response = await fetch(`autorack.proxy.rlwy.net:20200/reportes${reportType}`);
+    if (!response.ok) {
+      throw new Error('Error al obtener los datos del servidor');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Hubo un problema al obtener los datos. Intente de nuevo.');
+  }
+}
 
-        // Función para obtener los datos de ventas
-        function fetchSalesData(month) {
-            fetch(`/api/ventas?month=${month}`)
-                .then(response => response.json())
-                .then(data => {
-                    salesData = {
-                        labels: data.labels,
-                        values: data.values
-                    };
-                    renderChart(salesData);
-                })
-                .catch(error => {
-                    console.error('Error al obtener los datos de ventas:', error);
-                });
-        }
+// Función para actualizar el gráfico con datos desde la API
+async function updateChartType() {
+  const chartType = document.getElementById('chartType').value;
+  const reportType = 'ventas'; // Cambiar dinámicamente según sea necesario
 
-        // Botón de calcular estadísticas
-        document.getElementById('calculateStats').addEventListener('click', function() {
-            const values = salesData.values;
+  const data = await fetchData(reportType);
+  if (data) {
+    renderChart(data, chartType);
+  }
+}
+async function selectReport(reportType) {
+  const chartType = document.getElementById('chartType').value;
+  const data = await fetchData(reportType);
+  if (data) {
+    renderChart(data, chartType);
+  }
+}
 
-            if (values && values.length > 0) {
-                const avg = values.reduce((a, b) => a + b, 0) / values.length;
-                const max = Math.max(...values);
-                const min = Math.min(...values);
+    function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.text('Reporte de Datos', 10, 10);
+      doc.save('reporte.pdf');
+    }
 
-                document.getElementById('avgValue').textContent = avg.toFixed(2);
-                document.getElementById('maxValue').textContent = max;
-                document.getElementById('minValue').textContent = min;
-                document.getElementById('statistics').style.display = 'block';
-            }
-        });
+    function calculateStatistics() {
+      const values = [10, 20, 30];
+      document.getElementById('average').textContent = (values.reduce((a, b) => a + b, 0) / values.length).toFixed(2);
+      document.getElementById('minimum').textContent = Math.min(...values);
+      document.getElementById('maximum').textContent = Math.max(...values);
+    }
 
-        // Función para descargar el reporte PDF
-        document.getElementById('generatePDF').addEventListener('click', function() {
-            const doc = new jsPDF();
-            doc.text('Reporte de Ventas', 10, 10);
-            doc.text(`Mes: ${document.getElementById('monthFilter').value}`, 10, 20);
-            // Puedes agregar más contenido al PDF según sea necesario
-            doc.save('reporte_ventas.pdf');
-        });
-
-        // Función para descargar el reporte Excel (lógica básica)
-        document.getElementById('downloadExcel').addEventListener('click', function() {
-            const table = document.getElementById('reportDataTable');
-            let csvContent = "data:text/csv;charset=utf-8,";
-            const rows = table.querySelectorAll('tr');
-
-            rows.forEach((row, index) => {
-                const cols = row.querySelectorAll('td, th');
-                const rowData = [];
-                cols.forEach(col => {
-                    rowData.push(col.textContent);
-                });
-                csvContent += rowData.join(",") + "\n";
-            });
-
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement('a');
-            link.setAttribute('href', encodedUri);
-            link.setAttribute('download', 'reporte_ventas.csv');
-            link.click();
-        });
-
-        // Llamar a la función de ventas por defecto al cargar la página
-        fetchSalesData('Agosto');  // Cargar el reporte por defecto para el mes de agosto
-    </script>
+    // Render initial chart
+    updateChartType();
+  </script>
 </body>
 </html>

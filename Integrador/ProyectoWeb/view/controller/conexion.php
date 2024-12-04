@@ -1,22 +1,16 @@
 <?php
-// Parámetros de conexión a la base de datos
-$host = "autorack.proxy.rlwy.net";
-$port = "20200";
-$dbname = "railway";
-$username = "root";
-$password = "ULEVtQsbOHzMDqdPrwRRYopOXUudfNwy";
+$host = 'autorack.proxy.rlwy.net';
+$usuario = 'root';
+$contrasena = 'ULEVtQsbOHzMDqdPrwRRYopOXUudfNwy';
+$base_de_datos = 'railway';
 
-// Crear la conexión utilizando PDO
-try {
-    // Usamos el formato de conexión que soporta PDO con el puerto
-    $conn = new PDO("mysql:host=$host;port=$port;dbname=$dbname", $username, $password);
-    
-    // Establecer el modo de error de PDO para manejar las excepciones
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-    echo "Conexión exitosa a la base de datos.";
-} catch (PDOException $e) {
-    // Capturar cualquier error de conexión
-    echo "Error de conexión: " . $e->getMessage();
+// Intentar la conexión
+$conn = mysqli_connect($host, $usuario, $contrasena, $base_de_datos);
+
+// Verificar si la conexión fue exitosa
+if (!$conn) {
+    die("Conexión fallida: " . mysqli_connect_error());
+} else {
+    echo "Conexión exitosa";
 }
 ?>

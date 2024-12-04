@@ -85,7 +85,7 @@
                     <li class="nav-item"><a class="nav-link" href="#">Nosotros</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Servicios</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Horario</a></li>
-                    <li class="nav-item"><a class="nav-link" href="html/MenuReporte.html">Menu de Reportes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./MenuReporte.html">Menu de Reportes</a></li>
                 </ul>
 
 

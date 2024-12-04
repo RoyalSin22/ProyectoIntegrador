@@ -1,0 +1,358 @@
+:root {
+    --linea--borde-vacio: #f1c6d9;
+    --linea--borde-relleno: #ff69b4;
+    --fondo-calendario: #fff0f6;
+    --fondo-general: #f8f0f5;
+    --color-texto: #333;
+    --color-boton: #ff1493;
+    --color-boton-desactivado: #f1c6d9;
+    --color-borde-input: #dcdcdc;
+    --color-boton-hover: #ff007f;
+    --gradiente-fondo: linear-gradient(120deg, #ffb6c1, #fff0f6);
+    --sombra-card: rgba(0, 0, 0, 0.1);
+    --sombra-boton: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --transicion-general: 0.3s ease;
+}
+
+body {
+    background: var(--gradiente-fondo);
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    color: var(--color-texto);
+    animation: backgroundAnim 8s infinite alternate;
+    font-family: 'Playwrite AU NSW', sans-serif; /* Aplica Playwrite AU NSW */
+}
+
+@keyframes backgroundAnim {
+    0% {
+        background: linear-gradient(120deg, #ffb6c1, #fff0f6);
+    }
+    100% {
+        background: linear-gradient(120deg, #fff0f6, #ff69b4);
+    }
+}
+
+h1 {
+    font-family: 'Leckerli One', cursive;
+    color: var(--color-texto);
+    margin-bottom: 30px;
+    font-size: 5.5em;
+    text-align: center;
+    font-weight: bold;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    padding-bottom: 10px;
+    animation: bounceIn 2s ease-out;
+}
+
+@keyframes bounceIn {
+    0% {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    60% {
+        transform: translateY(20px);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.contenedor {
+    width: 100%;
+    max-width: 1050px;
+    text-align: center;
+    margin-bottom: 40px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px var(--sombra-card);
+    transition: transform var(--transicion-general), box-shadow var(--transicion-general);
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.contenedor:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.progreso-contenedor {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.progreso-contenedor::before {
+    content: '';
+    background-color: var(--linea--borde-vacio);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 4px;
+    width: 100%;
+    z-index: -1;
+    transition: 0.4s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.progreso {
+    background-color: var(--linea--borde-relleno);
+    height: 4px;
+    width: 0%;
+    position: absolute;
+    top: 50%;
+    z-index: -1;
+    border-radius: 10px;
+    transition: width 0.4s ease;
+}
+
+.circulo {
+    background-color: white;
+    border-radius: 50%;
+    border: 3px solid var(--linea--borde-vacio);
+    height: 50px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2em;
+    box-shadow: 0 4px 10px var(--sombra-card);
+    transition: border-color 0.4s ease, transform 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    animation: pulse 1s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.circulo:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.circulo.active {
+    border-color: var(--linea--borde-relleno);
+}
+
+.circulo.completed {
+    background-color: var(--linea--borde-relleno);
+    color: white;
+    animation: checkAnimation 0.6s ease-in-out forwards;
+}
+
+@keyframes checkAnimation {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.circulo.completed::after {
+    content: '\2714'; /* Marca de verificación */
+    font-size: 1.6em;
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.btn {
+    padding: 15px 30px;
+    background: linear-gradient(120deg, var(--color-boton), var(--color-boton-hover));
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    margin: 10px;
+    box-shadow: var(--sombra-boton);
+    transition: transform var(--transicion-general), background var(--transicion-general), box-shadow var(--transicion-general);
+    animation: bounce 2s infinite ease-in-out;
+}
+
+@keyframes bounce {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.btn:hover {
+    background: linear-gradient(120deg, var(--color-boton-hover), var(--color-boton));
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn:disabled {
+    background-color: var(--color-boton-desactivado);
+    cursor: not-allowed;
+}
+
+.contenedor-calendario,
+.contenedor-servicio {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 30px;
+    border: 1px solid var(--linea--borde-vacio);
+    border-radius: 15px;
+    background-color: var(--fondo-calendario);
+    width: 100%;
+    max-width: 1000px;
+    margin: 20px auto;
+    box-shadow: 0 6px 20px var(--sombra-card);
+}
+
+.input-calendario,
+#servicios {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 1.1em;
+    border-radius: 12px;
+    background-color: #fff;
+    color: var(--color-texto);
+    border: 2px solid var(--color-borde-input);
+    box-shadow: 0 4px 10px rgba(240, 115, 202, 0.1);
+    transition: border-color var(--transicion), box-shadow var(--transicion), background-color var(--transicion);
+}
+
+
+
+/*Paso 2: contenedor horarios*/
+
+h2 {
+    color: #333;
+    font-size: 1.8em;
+    margin-bottom: 15px;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+p {
+    font-size: 1.1em;
+    color: #555;
+    margin: 10px 0;
+}
+
+.contenedor-horarios {
+    margin-top: 20px;
+}
+
+label {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: inline-block;
+    color: #444;
+}
+
+
+/* estilo horario*/
+#horarios {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #dcdcdc;
+    border-radius: 10px;
+    font-size: 1.1em;
+    color: #333;
+    background-color: #fff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#horarios:focus {
+    border-color: #ff69b4; /* Rosa brillante */
+    outline: none;
+    box-shadow: 0 0 8px rgba(255, 105, 180, 0.5);
+}
+
+#horarios:hover {
+    border-color: #ff69b4;
+    box-shadow: 0 0 8px rgba(255, 105, 180, 0.3);
+}
+
+/* Contenedor general para el calendario */
+.contenedor-calendario {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 30px;
+    border: 1px solid var(--linea--borde-vacio);
+    border-radius: 15px;
+    background-color: var(--fondo-calendario);
+    width: 100%;
+    max-width: 1000px;
+    margin: 20px auto;
+    box-shadow: 0 6px 20px var(--sombra-card);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+/* Estilos para el contenedor que tiene el calendario y el GIF */
+.contenedor-calendario-video {
+    display: flex; /* Usamos Flexbox para colocar los elementos en fila */
+    align-items: center; /* Centra los elementos verticalmente */
+    
+}
+
+/* Estilos para el calendario */
+.calendario {
+    flex: 5; /* El calendario ocupa el espacio disponible */
+}
+
+/* Estilos para el contenedor del GIF */
+#gif-container {
+    flex-shrink: 0; /* Evita que el GIF se reduzca de tamaño */
+}
+
+#gif-container img {
+    width: 500px; /* Ajusta el tamaño del GIF */
+    height: auto; /* Mantiene la proporción del GIF */
+    object-fit: cover; /* Ajusta el contenido sin distorsionar */
+    border-radius: 1cm;
+}
+

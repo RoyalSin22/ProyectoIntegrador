@@ -17,7 +17,7 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard de Clientes</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Librería Chart.js -->
-    <link rel="stylesheet" href="../css/index.css"> <!-- Cambia según tu estructura -->
+    <link rel="stylesheet" href="../css/Dashboard.css"> <!-- Cambia según tu estructura -->
     <style>
         /* Estilos básicos */
         body {

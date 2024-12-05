@@ -30,7 +30,7 @@ try {
     <title>Dashboard de Cancelaciones</title>
     <!-- Enlace a la librería Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="../css/index.css"> <!-- Cambia la ruta según tu estructura -->
+    <link rel="stylesheet" href="../css/Dashboard.css"> <!-- Cambia la ruta según tu estructura -->
     <style>
         /* Estilos básicos */
         body {

@@ -14,23 +14,23 @@ $usuario_nombre = isset($_SESSION['usuario_nombre']) ? $_SESSION['usuario_nombre
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/index.css">
+    <style>
+        /* Aplica la fuente a todo el documento */
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn {
+            background-color: #ff6f61;
+            border-color: #ff6f61;
+        }
+
+        .btn:hover {
+            background-color: #ff4a36;
+            border-color: #ff4a36;
+        }
+    </style>
 </head>
-<style>
-    /* Aplica la fuente a todo el documento */
-    body {
-        font-family: 'Poppins', sans-serif;
-    }
-
-    .btn {
-        background-color: #ff6f61;
-        border-color: #ff6f61;
-    }
-
-    .btn:hover {
-        background-color: #ff4a36;
-        border-color: #ff4a36;
-    }
-</style>
 <body>
     <!-- Encabezado de Navegación -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -44,10 +44,17 @@ $usuario_nombre = isset($_SESSION['usuario_nombre']) ? $_SESSION['usuario_nombre
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" href="#">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Nosotros</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Servicios</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Horario</a></li>
-                    <li class="nav-item"><a class="nav-link" href="../html/MenuReporte.html">Menú de Reportes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="SobreNosotros.php">Nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Servicio.php">Servicios</a></li>
+                    <!-- Enlaces protegidos -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="Reserva.php" 
+                           onclick="return validarSesion(<?php echo $usuario_nombre ? 'true' : 'false'; ?>);">Reserva</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../html/MenuReporte.html" 
+                           onclick="return validarSesion(<?php echo $usuario_nombre ? 'true' : 'false'; ?>);">Menú de Reportes</a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav">
                     <?php if ($usuario_nombre): ?>
@@ -105,7 +112,50 @@ $usuario_nombre = isset($_SESSION['usuario_nombre']) ? $_SESSION['usuario_nombre
             <div class="col-md-6 d-flex flex-column justify-content-center">
                 <h2 class="display-4 fw-bold text-primary">Bienvenido a Salón de Belleza María Elena</h2>
                 <p class="lead text-muted">Ofrecemos una experiencia de belleza única y personalizada para que te sientas increíble. Disfruta de un servicio excepcional en un ambiente acogedor.</p>
-                <a href="#services" class="btn btn-primary btn-lg mt-3 shadow-lg">Descubre más</a>
+                <a href="Servicio.php" class="btn btn-primary btn-lg mt-3 shadow-lg">Descubre más</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Servicios -->
+    <section class="container mt-5">
+        <h3 class="text-center text-primary mb-5">Nuestros Servicios</h3>
+        <div class="row mt-4">
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-lg border-light rounded">
+                    <img src="../img/corte.png" class="card-img-top servicio-img" alt="Servicio 1">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-dark">Corte de Cabello</h5>
+                        <p class="card-text text-muted">Descripción del servicio.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-lg border-light rounded">
+                    <img src="../img/manicure.png" class="card-img-top servicio-img" alt="Servicio 2">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-dark">Manicura</h5>
+                        <p class="card-text text-muted">Descripción del servicio.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-lg border-light rounded">
+                    <img src="../img/maquillaje.png" class="card-img-top servicio-img" alt="Servicio 3">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-dark">Maquillaje</h5>
+                        <p class="card-text text-muted">Descripción del servicio.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-lg border-light rounded">
+                    <img src="../img/spa.jpg" class="card-img-top servicio-img" alt="Servicio 4">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-dark">Spa</h5>
+                        <p class="card-text text-muted">Descripción del servicio.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -124,5 +174,14 @@ $usuario_nombre = isset($_SESSION['usuario_nombre']) ? $_SESSION['usuario_nombre
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function validarSesion(autenticado) {
+            if (!autenticado) {
+                alert("Debes iniciar sesión para acceder a esta sección.");
+                return false; // Evita la redirección
+            }
+            return true; // Permite la redirección si está autenticado
+        }
+    </script>
 </body>
 </html>

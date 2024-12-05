@@ -1,0 +1,208 @@
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Contenedor principal */
+.container {
+    width: 90%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(to top, #ffffff, #f8f9fc);
+}
+
+/* Títulos */
+h1, h2 {
+    text-align: center;
+    margin: 20px 0;
+    color: #2e3d49;
+    font-weight: 600;
+}
+
+/* Estilos para las secciones de reportes */
+.report-section {
+    margin-bottom: 40px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.report-section h2 {
+    color: #4a90e2;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.report-section p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.report-info {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #2e3d49;
+}
+
+/* Estilo para los gráficos */
+.chart-container {
+    width: 100%;
+    height: 400px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: #f9f9f9;
+}
+
+/* Estilos para los botones */
+.button {
+    display: inline-block;
+    padding: 12px 25px;
+    margin-top: 20px;
+    background-color: #4a90e2;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #357ab7;
+}
+
+/* Estilos para tablas (si son necesarias) */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+th, td {
+    padding: 10px;
+}
+
+th {
+    background-color: #4a90e2;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Estilo para la barra lateral o sidebar */
+.sidebar {
+    background-color: #2e3d49;
+    color: white;
+    width: 250px;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    box-shadow: 4px 0 6px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    margin: 10px 0;
+    font-size: 1.1rem;
+}
+
+.sidebar a:hover {
+    background-color: #4a90e2;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+/* Responsividad */
+@media (max-width: 1024px) {
+    .container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .chart-container {
+        height: 350px;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+    }
+
+    .report-info {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .chart-container {
+        height: 300px;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+    }
+
+    .report-info {
+        font-size: 1rem;
+    }
+
+    .button {
+        width: 100%;
+        padding: 12px;
+    }
+
+    /* Sidebar para móviles */
+    .sidebar {
+        width: 100%;
+        position: relative;
+        height: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1rem;
+    }
+
+    .button {
+        padding: 12px;
+    }
+
+    .sidebar a {
+        font-size: 1rem;
+    }
+}

@@ -1,219 +1,141 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reportes - Salón de Belleza María Elena</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        .sidebar {
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background-color: #343a40;
-            color: #fff;
-            padding-top: 20px;
-        }
-
-        .sidebar a {
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 20px;
-            display: block;
-        }
-
-        .sidebar a:hover {
-            background-color: #495057;
-        }
-
-        .content {
-            margin-left: 250px;
-            padding: 20px;
-        }
-
-        .report-card {
-            margin-bottom: 20px;
-        }
-    </style>
+    <title>Dashboard de Reportes</title>
+    <link rel="stylesheet" href="../css/Reporte.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script> <!-- Incluye Chart.js -->
 </head>
 
 <body>
-    <div class="sidebar">
-        <h4 class="text-center">Reportes</h4>
-        <a href="#clientes">Listado de Clientes</a>
-        <a href="#empleados">Listado de Empleados</a>
-        <a href="#servicios">Listado de Servicios</a>
-        <a href="#cancelaciones">Cancelaciones Totales</a>
-        <a href="#satisfaccion">Reporte de Satisfacción</a>
-        <a href="#tiempo-respuesta">Tiempo Promedio de Respuesta</a>
-        <a href="#ventas">Reporte de Ventas</a>
-    </div>
-
-    <div class="content">
-        <h1 class="text-center mb-4">Reportes - Salón de Belleza María Elena</h1>
-
-        <!-- Report Section: Listado de Clientes -->
-        <div id="clientes" class="card report-card">
-            <div class="card-header">Listado de Clientes</div>
-            <div class="card-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Nombre</th>
-                            <th>Email</th>
-                            <th>Teléfono</th>
-                        </tr>
-                    </thead>
-                    <tbody id="clientes-table-body">
-                        <!-- Data will be populated dynamically -->
-                    </tbody>
-                </table>
-            </div>
+    <header>
+        <div class="navbar">
+            <h1>Sistema de Reportes del Salón de Belleza María Elena</h1>
+            <nav>
+                <ul>
+                    <li><a href="../controller/dashboardCancelacion.php">Reporte de Cancelaciones</a></li>
+                    <li><a href="../controller/dashboardVentas.php">Reporte de Ventas</a></li>
+                    <li><a href="../controller/dashboardSatisfaccion.php">Reporte de Satisfacción</a></li>
+                    <li><a href="../controller/dashboardMetodoPago.php">Reporte de Métodos de Pago</a></li>
+                </ul>
+            </nav>
         </div>
+    </header>
 
-        <!-- Report Section: Listado de Empleados -->
-        <div id="empleados" class="card report-card">
-            <div class="card-header">Listado de Empleados</div>
-            <div class="card-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Nombre</th>
-                            <th>Rol</th>
-                            <th>Email</th>
-                        </tr>
-                    </thead>
-                    <tbody id="empleados-table-body">
-                        <!-- Data will be populated dynamically -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Report Section: Listado de Servicios -->
-        <div id="servicios" class="card report-card">
-            <div class="card-header">Listado de Servicios</div>
-            <div class="card-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Servicio</th>
-                            <th>Precio</th>
-                        </tr>
-                    </thead>
-                    <tbody id="servicios-table-body">
-                        <!-- Data will be populated dynamically -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Report Section: Cancelaciones Totales -->
-        <div id="cancelaciones" class="card report-card">
-            <div class="card-header">Cancelaciones Totales</div>
-            <div class="card-body">
-                <canvas id="cancelacionesChart"></canvas>
-            </div>
-        </div>
-
-        <!-- Report Section: Reporte de Satisfacción -->
-        <div id="satisfaccion" class="card report-card">
-            <div class="card-header">Reporte de Satisfacción</div>
-            <div class="card-body">
-                <canvas id="satisfaccionChart"></canvas>
-            </div>
-        </div>
-
-        <!-- Report Section: Tiempo Promedio de Respuesta del Sistema -->
-        <div id="tiempo-respuesta" class="card report-card">
-            <div class="card-header">Reporte de Tiempo Promedio de Respuesta del Sistema</div>
-            <div class="card-body">
-                <canvas id="tiempoRespuestaChart"></canvas>
-            </div>
-        </div>
-
-        <!-- Report Section: Reporte de Ventas -->
-        <div id="ventas" class="card report-card">
-            <div class="card-header">Reporte de Ventas</div>
-            <div class="card-body">
-                <canvas id="ventasChart"></canvas>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <main>
+        <div class="container">
+            <div class="reports-wrapper">
+                <!-- Reporte de Clientes -->
+                <section class="report-card" id="clientes">
+                    <h2>Total de Clientes</h2>
+                    <p class="report-info">Número total de Clientes: 15</p>
+                    <p class="report-info">Numero de Clientes Registrado en el Sistema: 12</p>
+                    <div class="chart-container">
+                        <canvas id="clientesChart"></canvas>
+                    </div>
+                    <!-- Redirección al controlador de clientes -->
+                    <a href="../controller/dashboardClientes.php" class="btn">Ver más detalles</a>
+                </section>
+        
+                <!-- Reporte de Servicios -->
+                <section class="report-card" id="servicios">
+                    <h2>Servicios Más Solicitados</h2>
+                    <p class="report-info">Servicio más solicitado: Corte de cabello</p>
+                    <div class="chart-container">
+                        <canvas id="serviciosChart"></canvas>
+                    </div>
+                    <!-- Redirección al controlador de servicios -->
+                    <a href="../controller/dashboardServicios.php" class="btn">Ver más detalles</a>
+                </section>
+        
+                <!-- Reporte de Empleados -->
+                <section class="report-card" id="empleados">
+                    <h2>Desempeño de Empleados</h2>
+                    <p class="report-info">Empleado con más servicios realizados: Pedro Martinez</p>
+                    <div class="chart-container">
+                        <canvas id="empleadosChart"></canvas>
+                    </div>
+                    <!-- Redirección al controlador de empleados -->
+                    <a href="../controller/dashboardEmpleados.php" class="btn">Ver más detalles</a>
+                </section>
+    
     <script>
-        // Example data population
-        document.addEventListener("DOMContentLoaded", () => {
-            const clientes = [
-                { id: 1, nombre: "Juan Pérez", email: "juan@example.com", telefono: "123456789" },
-                { id: 2, nombre: "María López", email: "maria@example.com", telefono: "987654321" }
-            ];
-
-            const empleados = [
-                { id: 1, nombre: "Carlos Gómez", rol: "Estilista", email: "carlos@example.com" },
-                { id: 2, nombre: "Ana Torres", rol: "Recepcionista", email: "ana@example.com" }
-            ];
-
-            const servicios = [
-                { id: 1, servicio: "Corte de Cabello", precio: "$15" },
-                { id: 2, servicio: "Manicure", precio: "$20" }
-            ];
-
-            const populateTable = (tableBodyId, data) => {
-                const tbody = document.getElementById(tableBodyId);
-                data.forEach(item => {
-                    const row = document.createElement("tr");
-                    Object.values(item).forEach(value => {
-                        const cell = document.createElement("td");
-                        cell.textContent = value;
-                        row.appendChild(cell);
-                    });
-                    tbody.appendChild(row);
-                });
-            };
-
-            populateTable("clientes-table-body", clientes);
-            populateTable("empleados-table-body", empleados);
-            populateTable("servicios-table-body", servicios);
-
-            // Example charts
-            const renderChart = (ctxId, label, data, backgroundColor) => {
-                new Chart(document.getElementById(ctxId), {
-                    type: 'bar',
-                    data: {
-                        labels: label,
-                        datasets: [{
-                            data: data,
-                            backgroundColor: backgroundColor
-                        }]
+        // Configuración para los gráficos usando Chart.js
+        const ctxClientes = document.getElementById('clientesChart').getContext('2d');
+        const clientesChart = new Chart(ctxClientes, {
+            type: 'pie',
+            data: {
+                labels: ['Total de Clientes', 'Clientes Registrados'],
+                datasets: [{
+                    data: [15 , 12],
+                    backgroundColor: ['#4caf50', '#ff5722'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
                     },
-                    options: {
-                        responsive: true
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return context.label + ': ' + context.raw;
+                            }
+                        }
                     }
-                });
-            };
-
-            renderChart("cancelacionesChart", ["Enero", "Febrero", "Marzo"], [5, 3, 7], "#ff6384");
-            renderChart("satisfaccionChart", ["Muy Satisfecho", "Satisfecho", "Insatisfecho"], [60, 30, 10], "#36a2eb");
-            renderChart("tiempoRespuestaChart", ["0-5 min", "5-10 min", ">10 min"], [70, 20, 10], "#ffce56");
-            renderChart("ventasChart", ["Enero", "Febrero", "Marzo"], [1000, 1500, 2000], "#4bc0c0");
+                }
+            }
         });
+    
+        const ctxServicios = document.getElementById('serviciosChart').getContext('2d');
+        const serviciosChart = new Chart(ctxServicios, {
+            type: 'bar',
+            data: {
+                labels: ['Corte de Cabello', 'Manicura', 'Pedicura', 'Tratamientos Faciales'],
+                datasets: [{
+                    label: 'Número de Servicios',
+                    data: [9, 5, 4, 3],
+                    backgroundColor: '#4caf50' ,
+                    borderColor: '#388e3c',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    
+        const ctxEmpleados = document.getElementById('empleadosChart').getContext('2d');
+        const empleadosChart = new Chart(ctxEmpleados, {
+            type: 'doughnut',
+            data: {
+                labels: ['Pedro Martinez', 'Franklin Williams', 'Johan Barrera'],
+                datasets: [{
+                    data: [3, 5, 7],
+                    backgroundColor: ['#4caf50', '#ff9800', '#ff5722'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            }
+        });
+    
     </script>
-</body>
-
-</html>
+        <footer>
+            <p>&copy; 2024 Sistema de Reportes Salón de Belleza María Elena | Todos los derechos reservados</p>
+        </footer>
+    </body>
+    </html>

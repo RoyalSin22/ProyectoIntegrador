@@ -1,22 +1,19 @@
 <?php
-// Parámetros de conexión a la base de datos
-$host = "autorack.proxy.rlwy.net";
-$port = "36043"; // Usa el puerto correcto según la configuración de Railway
-$dbname = "railway";
-$username = "root";
-$password = "ULEVtQsbOHzMDqdPrwRRYopOXUudfNwy";
+// Parámetros de conexión a la base de datos utilizando PDO
+$host = 'autorack.proxy.rlwy.net';
+$port = '20200';
+$dbname = 'railway';
+$username = 'root';
+$password = 'ULEVtQsbOHzMDqdPrwRRYopOXUudfNwy';
 
-// Crear la conexión utilizando PDO
 try {
-    // Usamos el formato de conexión que soporta PDO con el puerto
+    // Crear la conexión con PDO
     $conn = new PDO("mysql:host=$host;port=$port;dbname=$dbname", $username, $password);
     
-    // Establecer el modo de error de PDO para manejar las excepciones
+    // Establecer el modo de error de PDO para manejar excepciones
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-    echo "Conexión exitosa a la base de datos.";
 } catch (PDOException $e) {
-    // Capturar cualquier error de conexión
+    // Si hay un error de conexión, mostrar el mensaje
     echo "Error de conexión: " . $e->getMessage();
 }
 ?>

@@ -1,31 +1,50 @@
 <?php
-session_start();
+session_start(); // Iniciar la sesión
+
 include("conexion.php");
 
 if (isset($_POST['login-btn'])) {
-    $email = mysqli_real_escape_string($conexion, $_POST['email']);
+    // Obtener los datos del formulario
+    $email = $_POST['email'];
     $password = $_POST['password'];
 
     // Verificar si los campos están vacíos
     if (empty($email) || empty($password)) {
-        echo "Por favor, completa ambos campos.";
+        echo "<div class='alert alert-danger'>Por favor, ingresa tus credenciales.</div>";
         exit();
     }
 
-    // Verificar las credenciales en la base de datos
-    $query = "SELECT * FROM clientes WHERE Email='$email'";
-    $result = mysqli_query($conexion, $query);
-    $user = mysqli_fetch_assoc($result);
+    // Buscar el usuario por correo electrónico
+    $query = "SELECT * FROM cliente WHERE Email=:email";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':email', $email);
+    $stmt->execute();
 
-    if ($user && password_verify($password, $user['Contrasena'])) {
-        $_SESSION['usuario_nombre'] = $user['Nombre'];
-        header("Location: index.php");
-        exit();
+    // Verificar si se encontró un usuario
+    if ($stmt->rowCount() > 0) {
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Verificar la contraseña directamente (sin password_verify)
+        if ($password == $user['Contrasena']) {
+            // Iniciar sesión
+            $_SESSION['usuario_nombre'] = $user['Nombre'];
+
+            // Redirigir a la página principal
+            header("Location: index.php");
+            exit();
+        } else {
+            echo "<div class='alert alert-danger'>Contraseña incorrecta.</div>";
+        }
     } else {
-        echo "Credenciales incorrectas. Por favor, verifica tu correo y contraseña.";
+        echo "<div class='alert alert-danger'>El correo electrónico no está registrado.</div>";
     }
 }
 ?>
+
+
+
+
+
 
 <!DOCTYPE html>
 <html lang="es">
